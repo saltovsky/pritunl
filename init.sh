@@ -31,5 +31,5 @@ fi
 # Start Pritunl (демонизируется)
 pritunl start
 
-# Держим контейнер живым — следим за логами
+# Держим контейнер живым — tail логов
 exec tail -f /var/lib/pritunl/pritunl.log
