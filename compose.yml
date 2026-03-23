@@ -1,0 +1,43 @@
+services:
+  mongo:
+    image: mongo:7.0.5 # Лучше фиксировать версию, а не latest
+    container_name: pritunldb
+    restart: unless-stopped
+    hostname: pritunldb
+    volumes:
+      - ./db:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pritunl:
+    build: .
+    image: pritunl
+    container_name: pritunl
+    restart: unless-stopped
+    hostname: pritunl
+    depends_on:
+      mongo:
+        condition: service_healthy
+    # privileged: true # Раскомментируй, если cap_add не хватит для iptables
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+      - NET_RAW
+    sysctls:
+      - net.ipv4.ip_forward=1
+      - net.ipv6.conf.all.disable_ipv6=0
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./pritunl_data:/var/lib/pritunl # Сохранение конфига и сертификатов
+    ports:
+      - 80:80
+      - 443:443
+      - 1194:1194/tcp
+      - 1194:1194/udp
+      - 1195:1195/udp
+    environment:
+      - TZ=Europe/Moscow
+      - SERVER_PORT=443
