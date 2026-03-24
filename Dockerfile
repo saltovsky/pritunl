@@ -1,4 +1,4 @@
-FROM alpine:3.23
+FROM alpine:3.20
 LABEL maintainer="Daniel Saltovsky <daniel@saltovsky.ru>"
 
 ENV VERSION="1.34.4575.42"
