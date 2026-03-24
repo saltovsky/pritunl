@@ -1,4 +1,4 @@
-FROM alpine:3.19.1
+FROM alpine:3.23
 LABEL maintainer="Daniel Saltovsky <daniel@saltovsky.ru>"
 
 ENV VERSION="1.34.4575.42"
@@ -39,7 +39,6 @@ RUN sed -i -e '/countryName_max/a countryName_value\t\t= US' /etc/ssl/openssl.cn
 ADD rootfs /
 RUN chmod +x /init
 
-EXPOSE 80
-EXPOSE 443
-EXPOSE 1194
+EXPOSE 80/tcp 443/tcp 1194/udp 1195/udp
+
 ENTRYPOINT ["/init"]
