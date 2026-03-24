@@ -37,9 +37,9 @@ RUN sed -i -e '/^attributes/a prompt\t\t\t= yes' /etc/ssl/openssl.cnf
 RUN sed -i -e '/countryName_max/a countryName_value\t\t= US' /etc/ssl/openssl.cnf
 
 ADD rootfs /
+RUN chmod +x /init
 
 EXPOSE 80
 EXPOSE 443
 EXPOSE 1194
-EXPOSE 19933
 ENTRYPOINT ["/init"]
